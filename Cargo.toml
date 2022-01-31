@@ -13,20 +13,18 @@ categories = ["network-programming"]
 all-features = true
 rustdoc-args = ["--cfg", "docsrs"]
 
-[features]
-websocket = ["async-tungstenite", "ws_stream_tungstenite"]
+[patch.crates-io]
+smol = { git = "https://github.com/esp-rs-compat/smol" }
+polling = { git = "https://github.com/esp-rs-compat/polling" }
+socket2 = { git = "https://github.com/esp-rs-compat/socket2" }
 
 [dependencies]
+smol = "1.2"
 async-std = "1.6"
 async-io = "1.0"
 futures = "0.3"
 bytes = "1.0"
-webpki = "0.21"
-async-tungstenite = { version = "0.11.0", features = ["async-std-runtime", "async-tls"], optional = true }
-ws_stream_tungstenite = { version = "0.4.0", optional = true }
-async-tls = "0.11"
-rustls = "0.19"
-mqttbytes = "0.2"
+mqttbytes = "0.6.0"
 pollster = "0.2"
 async-channel = "1.5"
 log = "0.4"

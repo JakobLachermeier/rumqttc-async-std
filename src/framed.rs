@@ -1,7 +1,8 @@
 use bytes::BytesMut;
 use mqttbytes::v4::*;
 use mqttbytes::*;
-use futures::io::{AsyncRead, AsyncReadExt, AsyncWrite, AsyncWriteExt};
+//use futures::io::{AsyncRead, AsyncReadExt, AsyncWrite, AsyncWriteExt};
+use smol::io::{AsyncRead, AsyncReadExt, AsyncWrite, AsyncWriteExt};
 
 use crate::{Incoming, MqttState, StateError};
 use std::io;
@@ -35,7 +36,11 @@ impl Network {
     async fn read_bytes(&mut self, required: usize) -> io::Result<usize> {
         let mut total_read = 0;
         loop {
-            let read = self.socket.read(&mut self.read).await?;
+            let mut buffer: [u8; 1024] = [0; 1024];
+            // need read_buf function
+            // maybe use this library instead: https://lib.rs/crates/rumqttc-async-std
+            let read = self.socket.read(&mut buffer).await?;
+            self.read.extend_from_slice(&buffer[0..read]);
             if 0 == read {
                 return if self.read.is_empty() {
                     Err(io::Error::new(

@@ -31,6 +31,7 @@ pub struct AsyncClient {
 impl AsyncClient {
     /// Create a new `AsyncClient`
     pub fn new(options: MqttOptions, cap: usize) -> (AsyncClient, EventLoop) {
+        info!("Creating Eventloop");
         let mut eventloop = EventLoop::new(options, cap);
         let request_tx = eventloop.handle();
         let cancel_tx = eventloop.cancel_handle();
@@ -137,6 +138,7 @@ pub struct Client {
 impl Client {
     /// Create a new `Client`
     pub fn new(options: MqttOptions, cap: usize) -> (Client, Connection) {
+        info!("Creating new AsyncClient");
         let (client, eventloop) = AsyncClient::new(options, cap);
         let client = Client { client };
 
